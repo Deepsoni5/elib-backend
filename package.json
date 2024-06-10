@@ -1,0 +1,16 @@
+{
+  "name": "elib",
+  "version": "1.0.0",
+  "description": "EBook API Project",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "author": "Deep soni",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
