@@ -55,7 +55,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       );
 
       // Response
-      res.json({
+      res.status(201).json({
          accessToken: token,
       });
    } catch (error) {
@@ -64,4 +64,51 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
    }
 };
 
-export { createUser };
+const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+   const { email, password } = req.body;
+   if (!email || !password) {
+      return next(createHttpError(400, "All credentials required!"));
+   }
+   let user;
+   try {
+      user = await userModel.findOne({ email });
+
+      if (!user) {
+         return next(createHttpError(404, "User not found!"));
+      }
+   } catch (error) {
+      return next(
+         createHttpError(
+            500,
+            "something went wrong while fetching user in login!"
+         )
+      );
+   }
+
+   try {
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+         return next(createHttpError(400, "Username or Password incorrect!"));
+      }
+
+      // create access token for login
+
+      const token = sign({ sub: user._id }, config.jwtSecret as string, {
+         expiresIn: "7d",
+      });
+
+      res.json({
+         accessToken: token,
+      });
+   } catch (error) {
+      return next(
+         createHttpError(
+            500,
+            "Something went wrong while matching password or generating token!"
+         )
+      );
+   }
+};
+
+export { createUser, loginUser };
