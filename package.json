@@ -4,7 +4,7 @@
   "description": "EBook API Project",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.ts"
+    "dev": "node api.js && nodemon server.ts"
   },
   "author": "Deep soni",
   "license": "ISC",
